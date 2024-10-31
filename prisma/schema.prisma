@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://neondb_owner:tio3w8asLSPJ@ep-red-bar-a5it2plf.us-east-2.aws.neon.tech/neondb?sslmode=require"
+}
+
+model User {
+  id               String    @id
+  email            String    @unique
+  isSubscribed     Boolean   @default(false)
+  subscriptionEnds DateTime?
+  todos            Todo[]
+}
+
+model Todo {
+  id        String   @id @default(cuid())
+  title     String
+  completed Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
